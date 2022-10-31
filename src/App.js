@@ -1,25 +1,40 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { PureComponent } from "react";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import CartContextProvider from "./context/CartContext";
+import CategoryContextProvider from "./context/CategoryContext";
+import CurrencyContextProvider from "./context/CurrencyContext";
+import Main from "./pages/Main";
+import Cart from "./pages/Cart";
+import ProductPage from "./pages/ProductPage";
+import Header from "./components/Header";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends PureComponent {
+  render() {
+    return (
+      <div className="container">
+        <Router>
+          <CurrencyContextProvider>
+            <CartContextProvider>
+              <CategoryContextProvider>
+                <Header />
+                <Switch>
+                  <Route exact path="/">
+                    <Main />
+                  </Route>
+                  <Route path="/cart">
+                    <Cart />
+                  </Route>
+                  <Route exact path="/products/:id">
+                    <ProductPage />
+                  </Route>
+                </Switch>
+              </CategoryContextProvider>
+            </CartContextProvider>
+          </CurrencyContextProvider>
+        </Router>
+      </div>
+    );
+  }
 }
 
 export default App;
