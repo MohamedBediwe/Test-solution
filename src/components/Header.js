@@ -33,6 +33,10 @@ class Header extends Component {
 
 const StyledHeader = styled.header`
   height: 80px;
+  position: sticky;
+  z-index: 2;
+  top: 0;
+  background-color: #fff;
   nav {
     position: relative;
     height: 100%;

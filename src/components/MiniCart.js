@@ -42,7 +42,11 @@ class MiniCart extends Component {
               <Price inMiniCart={true} />
               <div className="cart-buttons">
                 <Link to="/cart">
-                  <button>View Bag</button>
+                  <button
+                    onClick={() => document.querySelector(".cart-btn").click()}
+                  >
+                    View Bag
+                  </button>
                 </Link>
                 {inCart.length > 0 && (
                   <button
