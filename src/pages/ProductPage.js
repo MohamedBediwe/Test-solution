@@ -86,7 +86,6 @@ class ProductPage extends PureComponent {
                     className="add-to-cart"
                     onClick={() =>
                       context.addToCart({
-                        ...product,
                         ...this.state,
                         productId: nanoid(),
                         count: 1,
