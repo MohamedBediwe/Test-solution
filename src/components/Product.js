@@ -17,7 +17,7 @@ export default class Product extends PureComponent {
     this.setState({ [attrName]: newValue });
   };
 
-  addTocart = (product) => {
+  addToCart = (product) => {
     this.context.addToCart({
       ...product,
       count: 1,
@@ -27,70 +27,88 @@ export default class Product extends PureComponent {
   };
 
   render() {
-    const { name, id, inStock, gallery, attributes } = this.props.product;
+    const { name, id, inStock, gallery, attributes, brand } =
+      this.props.product;
     const {
       amount,
       currency: { symbol },
     } = this.props.price;
-    return (
-      <StyledProduct inStock={inStock}>
-        <div className="image">
-          <img src={gallery[0]} alt="Product" />
 
-          <div className="hovered">
-            {attributes.map((e, i) => {
-              if (e.name === "Capacity")
-                return (
-                  <Capacity
-                    key={i}
-                    productName={name}
-                    capacity={e}
-                    updateAttr={this.updataAttr}
-                  />
-                );
-              if (e.name === "Color")
-                return (
-                  <Colors
-                    key={i}
-                    colors={e}
-                    productName={name}
-                    updateAttr={this.updataAttr}
-                  />
-                );
-              if (e.name === "Size")
-                return (
-                  <Sizes
-                    key={i}
-                    productName={name}
-                    updateAttr={this.updataAttr}
-                    sizes={e}
-                  />
-                );
-              else
-                return (
-                  <OtherProductDetails
-                    key={i}
-                    details={e}
-                    updateAttr={this.updataAttr}
-                  />
-                );
-            })}
-          </div>
+    return (
+      <StyledProduct data-name={name.split(" ").join("")} inStock={inStock}>
+        <div className="image">
+          <Link to={`/products/${id}`}>
+            <img src={gallery[0]} alt="Product" />
+          </Link>
+
           {!inStock && <p className="out-of-stock">out of stock</p>}
           {inStock && (
             <div
-              className="add-to-cart"
+              className="quick-add-to-cart"
               onClick={(e) => {
                 e.stopPropagation();
-                this.addTocart({ ...this.props.product });
+                let popUp = document.querySelector(
+                  `[data-name=${name.split(" ").join("")}] .popup`
+                );
+                popUp.style.display =
+                  popUp.style.display === "none" ? "flex" : "none";
               }}
             >
               <img src={addToCartBtn} alt="Add to cart" />
             </div>
           )}
         </div>
+        <STYLED_POPUP className="popup">
+          {attributes.map((e, i) => {
+            if (e.name === "Capacity")
+              return (
+                <Capacity
+                  key={i}
+                  productName={name}
+                  capacity={e}
+                  updateAttr={this.updataAttr}
+                />
+              );
+            if (e.name === "Color")
+              return (
+                <Colors
+                  key={i}
+                  colors={e}
+                  productName={name}
+                  updateAttr={this.updataAttr}
+                />
+              );
+            if (e.name === "Size")
+              return (
+                <Sizes
+                  key={i}
+                  productName={name}
+                  updateAttr={this.updataAttr}
+                  sizes={e}
+                />
+              );
+            else
+              return (
+                <OtherProductDetails
+                  key={i}
+                  details={e}
+                  updateAttr={this.updataAttr}
+                />
+              );
+          })}
+          <button
+            className="add-to-cart"
+            onClick={() => {
+              this.addToCart({ ...this.props.product });
+            }}
+          >
+            add to cart
+          </button>
+        </STYLED_POPUP>
         <Link to={`/products/${id}`}>
-          <p className="name">{name}</p>
+          <p className="name">
+            {brand} {name}
+          </p>
           <p className="price">
             {symbol} {amount}
           </p>
@@ -99,6 +117,31 @@ export default class Product extends PureComponent {
     );
   }
 }
+
+const STYLED_POPUP = styled.div`
+  display: none;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  position: absolute;
+  background-color: #ffffffeb;
+  width: 100%;
+  height: 100%;
+  padding: 20px 10px;
+  left: 0;
+  top: 0;
+  .add-to-cart {
+    text-transform: uppercase;
+    color: #fff;
+    background-color: var(--green);
+    padding: 16px 32px;
+    margin-top: 20px;
+    width: 100%;
+    max-width: 450px;
+    font-size: 16px;
+    font-weight: 600;
+  }
+`;
 
 const StyledProduct = styled.div`
   opacity: ${(props) => (props.inStock ? "1" : "0.6")};
@@ -109,7 +152,7 @@ const StyledProduct = styled.div`
   transition: 0.3s ease-in-out all;
   &:hover {
     box-shadow: 0px 0px 20px 1px rgb(133 139 145 / 28%);
-    .add-to-cart {
+    .quick-add-to-cart {
       display: block;
       border-radius: 50%;
       z-index: 100;
@@ -122,9 +165,10 @@ const StyledProduct = styled.div`
   > .image {
     position: relative;
     cursor: pointer;
+    text-align: center;
     img {
-      height: 330px;
-      width: 100%;
+      max-height: 330px;
+      max-width: 100%;
     }
   }
 
@@ -147,25 +191,11 @@ const StyledProduct = styled.div`
   p.price {
     color: var(--black);
   }
-  .add-to-cart {
+  .quick-add-to-cart {
     position: absolute;
     display: none;
     bottom: -25px;
     right: 10px;
-  }
-  .hovered {
-    display: none;
-    position: absolute;
-    background-color: #ffffff61;
-    width: 100%;
-    height: 100%;
-    left: 0;
-    top: 0;
-  }
-  &:hover .hovered {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
+    z-index: 10;
   }
 `;

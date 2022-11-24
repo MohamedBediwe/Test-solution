@@ -21,9 +21,9 @@ export default class ProductInCart extends PureComponent {
     return (
       <StyledDiv>
         <div className="left">
-          <h2>{name}</h2>
-          <h3>{brand}</h3>
-          <h4>
+          <h2 className="brand">{brand}</h2>
+          <h3 className="name">{name}</h3>
+          <h4 className="price">
             {price.currency.symbol}
             {price.amount}
           </h4>
@@ -91,4 +91,13 @@ const StyledDiv = styled.div`
   border: 0.5px solid transparent;
   border-color: #e5e5e5 transparent transparent;
   padding-block: 15px;
+  .name {
+    margin-bottom: 10px;
+  }
+  .brand {
+    margin-bottom: 10px;
+  }
+  .price {
+    margin-bottom: 15px;
+  }
 `;

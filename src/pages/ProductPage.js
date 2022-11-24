@@ -48,13 +48,13 @@ class ProductPage extends PureComponent {
         (e) => e.currency.label === this.context.currency.label
       )[0];
       return (
-        <StyledPage className="product-page">
+        <StyledPage inStock={product.inStock} className="product-page">
           <div className="left">
-            <Gallery gallery={product.gallery} />
+            <Gallery inStock={product.inStock} gallery={product.gallery} />
           </div>
           <div className="right">
-            <h2 className="name">{product.name}</h2>
-            <p className="brand">{product.brand}</p>
+            <h2 className="brand">{product.brand}</h2>
+            <p className="name">{product.name}</p>
             {product.attributes.map((e, i) => {
               if (e.name === "Capacity")
                 return (
@@ -81,21 +81,31 @@ class ProductPage extends PureComponent {
             </div>
             {
               <CartContext.Consumer>
-                {(context) => (
-                  <button
-                    className="add-to-cart"
-                    onClick={() =>
-                      context.addToCart({
-                        ...this.state,
-                        productId: nanoid(),
-                        count: 1,
-                      })
-                    }
-                    disabled={!product.inStock}
-                  >
-                    {product.inStock ? "add to cart" : "out of stock"}
-                  </button>
-                )}
+                {(context) => {
+                  const addToCart = () => {
+                    let keys = Object.keys(this.state)
+                      .filter((e) => e !== "product")
+                      .map((e) => ({ [e]: this.state[e] }));
+
+                    context.addToCart({
+                      ...Object.assign(...keys),
+                      ...this.state.product,
+                      productId: nanoid(),
+                      count: 1,
+                    });
+                  };
+                  return (
+                    <button
+                      className="add-to-cart"
+                      onClick={() => {
+                        addToCart();
+                      }}
+                      disabled={!product.inStock}
+                    >
+                      {product.inStock ? "add to cart" : "out of stock"}
+                    </button>
+                  );
+                }}
               </CartContext.Consumer>
             }
             <div className="description">{parse(`${product.description}`)}</div>
@@ -121,11 +131,11 @@ const StyledPage = styled.main`
   margin-top: 50px;
   gap: 100px;
   .name {
-    margin-bottom: 10px;
+    margin-bottom: 20px;
     font-size: 30px;
   }
   .brand {
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     font-size: 30px;
   }
   .price {
@@ -141,7 +151,7 @@ const StyledPage = styled.main`
   button.add-to-cart {
     text-transform: uppercase;
     color: #fff;
-    background-color: var(--green);
+    background-color: ${(props) => (props.inStock ? "var(--green)" : "#333")};
     padding: 16px 32px;
     margin-bottom: 20px;
     width: 100%;

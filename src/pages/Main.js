@@ -3,6 +3,7 @@ import { PRODUCTS_QEURY } from "../gql/Queries";
 import client from "../gql/apolloClient";
 import { CategoryContext } from "../context/CategoryContext";
 import ProductsList from "../components/ProductsList";
+import styled from "styled-components";
 
 export default class Main extends PureComponent {
   static contextType = CategoryContext;
@@ -34,15 +35,7 @@ export default class Main extends PureComponent {
     const products = this.state.products;
     return (
       <main>
-        <h2
-          style={{
-            textTransform: "capitalize",
-            fontSize: "42px",
-            marginTop: "15px",
-          }}
-        >
-          {category}
-        </h2>
+        <STYLED_H2>{category}</STYLED_H2>
         {products.length > 0 ? (
           <ProductsList products={products} />
         ) : (
@@ -52,3 +45,9 @@ export default class Main extends PureComponent {
     );
   }
 }
+
+const STYLED_H2 = styled.h2`
+  text-transform: capitalize;
+  font-size: 42px;
+  margin-top: 15px;
+`;

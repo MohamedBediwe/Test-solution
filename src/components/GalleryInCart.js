@@ -9,6 +9,14 @@ export default class GalleryInCart extends Component {
   };
 
   handleClick = (value) => {
+    if (this.state.image + value < 0) {
+      this.setState({ image: this.props.gallery.length - 1 });
+      return;
+    }
+    if (this.state.image + value === this.props.gallery.length) {
+      this.setState({ image: 0 });
+      return;
+    }
     this.setState({ image: this.state.image + value });
   };
 
@@ -21,19 +29,17 @@ export default class GalleryInCart extends Component {
           alt="product"
           className="product-image"
         />
-        <div>
-          {this.state.image > 0 && (
+        {gallery.length > 1 && (
+          <div>
             <span className="prev" onClick={() => this.handleClick(-1)}>
               <img src={LeftArrow} alt="previous" />
             </span>
-          )}
 
-          {this.state.image + 1 < gallery.length && (
             <span className="next" onClick={() => this.handleClick(1)}>
               <img src={RightArrow} alt="next" />
             </span>
-          )}
-        </div>
+          </div>
+        )}
       </StyledDiv>
     );
   }

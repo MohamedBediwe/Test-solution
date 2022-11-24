@@ -1,4 +1,5 @@
 import React, { PureComponent } from "react";
+import { Link } from "react-router-dom";
 import { CategoryContext } from "../context/CategoryContext";
 import client from "../gql/apolloClient";
 import { CATEGORIES_QUERY } from "../gql/Queries";
@@ -21,6 +22,12 @@ class CategoriesList extends PureComponent {
     this.fetchCategories();
   }
 
+  componentDidUpdate() {
+    if (this.context.category === "") {
+      this.context.changeCategory(this.state.categories[0]);
+    }
+  }
+
   static contextType = CategoryContext;
   render() {
     const { category, changeCategory } = this.context;
@@ -30,11 +37,11 @@ class CategoriesList extends PureComponent {
         {categories.length > 0 &&
           categories.map((e) => (
             <button
-              className={`${category === e ? "active" : ""}`}
               key={e}
               onClick={() => changeCategory(e)}
+              className={`${category === e ? "active" : ""}`}
             >
-              {e}
+              <Link to="/">{e}</Link>
             </button>
           ))}
       </div>

@@ -13,7 +13,7 @@ export default class Gallery extends Component {
   render() {
     const gallery = this.props.gallery;
     return (
-      <ImageHolder className="column">
+      <ImageHolder inStock={this.props.inStock} className="column">
         <div className="small">
           {gallery.map((e, i) => (
             <img
@@ -27,6 +27,7 @@ export default class Gallery extends Component {
         </div>
         <div className="main">
           <img src={gallery[this.state.mainImage]} alt="Product" />
+          {!this.props.inStock && <p className="out-of-stock">out of stock</p>}
         </div>
       </ImageHolder>
     );
@@ -53,9 +54,22 @@ const ImageHolder = styled.div`
     width: 400px;
     height: 350px;
     margin-left: 20px;
+    position: relative;
     img {
       width: 100%;
       max-height: 100%;
+    }
+    .out-of-stock {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      left: 0;
+      top: 0;
+      text-transform: uppercase;
+      font-size: 24px;
+      color: #8d8f9a;
+      display: grid;
+      place-items: center;
     }
   }
 `;

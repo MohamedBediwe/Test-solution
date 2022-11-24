@@ -6,7 +6,7 @@ class CategoryContextProvider extends Component {
   state = {
     category: localStorage.getItem("category")
       ? JSON.parse(localStorage.getItem("category"))
-      : "all",
+      : "",
   };
 
   changeCategory = (category) => {

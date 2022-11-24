@@ -52,8 +52,11 @@ class MiniCart extends Component {
                   <button
                     className="checkout"
                     onClick={() => {
-                      setTimeout(removeCart, 1000);
-                      this.props.history.push("/");
+                      removeCart();
+                      document.querySelector(".cart-btn").click();
+                      setTimeout(() => {
+                        this.props.history.push("/");
+                      }, 1000);
                     }}
                   >
                     checkout

@@ -6,6 +6,7 @@ export const PRODUCTS_QEURY = gql`
       name
       products {
         name
+        brand
         inStock
         id
         gallery
@@ -52,6 +53,7 @@ export const PRODUCT_QUERY = gql`
   query ($id: String!) {
     product(id: $id) {
       name
+      brand
       gallery
       id
       prices {
